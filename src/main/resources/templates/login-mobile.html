@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>登录页面</title>
+  <script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<form method="post" th:action="@{/mobile/form}">
+  <input id="mobile" name="mobile" type="text" placeholder="手机号码"><br>
+  <div>
+    <input name="mobileCode" type="text" placeholder="验证码">
+    <button type="button" id="sendCode">获取验证码</button>
+  </div>
+  <div th:if="${param.error}">
+    <span th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" style="color:red">用户名或密码错误</span>
+  </div>
+  <div><input name="remember-me" type="checkbox">记住我</div>
+  <button type="submit">登录</button>
+</form>
+
+<script>
+  // 获取手机短信验证码
+  $("#sendCode").click(function () {
+    var mobile = $('#mobile').val().trim();
+    if(mobile == '') {
+      alert("手机号不能为空");
+      return;
+    }
+    // /code/mobile?mobile=123123123
+    var url = "/code/mobile?mobile=" + mobile;
+    $.get(url, function(data){
+      alert(data.msg);
+    });
+  });
+</script>
+</body>
+</html>
